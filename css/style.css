@@ -760,10 +760,8 @@ body {
     cursor: pointer;
 }
 
-/* Hides scoring elements when Rangefinder mode is active */
-.rangefinder-mode .score-counter-container,
-.rangefinder-mode .score-container,
-.rangefinder-mode #log-score-btn,
-.rangefinder-mode .log-score-btn {
+/* Hide the Score Card and Finish Button in Rangefinder Mode */
+.rangefinder-mode .score-card,
+.rangefinder-mode .finish-round-btn {
     display: none !important;
 }

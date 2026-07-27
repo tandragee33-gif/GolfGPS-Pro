@@ -472,25 +472,18 @@ const roundRecord = {
         });
     }
 
- // Mode Switcher (Score & GPS vs Rangefinder Only)
+// Mode Switcher (Score & GPS vs Rangefinder Only)
     const modeToggleBtn = document.getElementById("mode-toggle-btn");
+    const playView = document.getElementById("play-view");
 
-    if (modeToggleBtn) {
+    if (modeToggleBtn && playView) {
         modeToggleBtn.addEventListener("click", () => {
-            // Target all scoring elements
-            const scoreContainer = document.querySelector(".score-counter-container") || document.querySelector(".score-container");
-            const logBtn = document.getElementById("log-score-btn");
-
-            const isRangefinder = modeToggleBtn.innerText.includes("Score");
-
-            if (isRangefinder) {
+            playView.classList.toggle("rangefinder-mode");
+            
+            if (playView.classList.contains("rangefinder-mode")) {
                 modeToggleBtn.innerText = "Mode: 🎯 Rangefinder Only";
-                if (scoreContainer) scoreContainer.style.setProperty("display", "none", "important");
-                if (logBtn) logBtn.style.setProperty("display", "none", "important");
             } else {
                 modeToggleBtn.innerText = "Mode: 📝 Score & GPS";
-                if (scoreContainer) scoreContainer.style.removeProperty("display");
-                if (logBtn) logBtn.style.removeProperty("display");
             }
         });
     }

@@ -399,10 +399,17 @@ const roundRecord = {
         });
     });
 
-    // Listen for Handicap Changes
+// Load Saved Playing Handicap from Local Storage (Default to 18 if not set)
     const hcpInput = document.getElementById("playing-handicap");
     if (hcpInput) {
+        const savedHcp = localStorage.getItem("default_playing_handicap");
+        if (savedHcp !== null) {
+            hcpInput.value = savedHcp;
+        }
+
+        // Save new handicap whenever you change it on screen
         hcpInput.addEventListener("input", () => {
+            localStorage.setItem("default_playing_handicap", hcpInput.value);
             updateHoleDisplay();
         });
     }

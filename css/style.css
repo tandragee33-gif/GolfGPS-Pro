@@ -761,7 +761,9 @@ body {
 }
 
 /* Hides scoring elements when Rangefinder mode is active */
-.rangefinder-mode .score-card-container,
+.rangefinder-mode .score-counter-container,
+.rangefinder-mode .score-container,
+.rangefinder-mode #log-score-btn,
 .rangefinder-mode .log-score-btn {
     display: none !important;
 }

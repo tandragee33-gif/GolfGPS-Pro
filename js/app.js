@@ -334,6 +334,25 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // --- GPS TRACKING ---
+    if ("geolocation" in navigator) {
+        watchId = navigator.geolocation.watchPosition(
+            (position) => {
+                const userLat = position.coords.latitude;
+                const userLon = position.coords.longitude;
+                updateHoleDisplay(userLat, userLon);
+            },
+            (error) => {
+                console.warn("GPS error or permission denied:", error);
+                updateHoleDisplay();
+            },
+            {
+                enableHighAccuracy: true,
+                maximumAge: 0,
+                timeout: 10000
+            }
+        );
+    }
     // Initial render
     updateHoleDisplay();
     renderStatsView();

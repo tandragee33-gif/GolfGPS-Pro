@@ -11,45 +11,95 @@
         <!-- Top Header -->
         <header class="app-header">
             <h1>🏌️ GolfGPS Pro</h1>
-            <span class="status-badge">GPS Ready</span>
+            <span class="status-badge" id="gps-status">GPS Ready</span>
         </header>
 
-        <!-- Main Screen Content -->
+        <!-- Main Content Area with Screen Views -->
         <main class="app-content">
-            <div class="hero-card">
-                <h2>Ready for Your Round?</h2>
-                <p>Select a course or tap quick start to begin tracking distances.</p>
-                <button class="primary-btn" id="start-round-btn">▶ Start New Round</button>
-            </div>
+            <!-- 1. Play Screen -->
+            <section id="play-view" class="view active-view">
+                <div class="hero-card">
+                    <h2>Ready for Your Round?</h2>
+                    <p>Select a course or tap quick start to begin tracking distances.</p>
+                    <button class="primary-btn" id="start-round-btn">▶ Start New Round</button>
+                </div>
 
-            <!-- Dashboard Stats Preview -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-value">18</span>
-                    <span class="stat-label">Holes</span>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-value">18</span>
+                        <span class="stat-label">Holes</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">Par 72</span>
+                        <span class="stat-label">Course Standard</span>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-value">Par 72</span>
-                    <span class="stat-label">Course Standard</span>
+            </section>
+
+            <!-- 2. Courses Screen -->
+            <section id="courses-view" class="view">
+                <h2>Select a Course</h2>
+                <div class="course-list">
+                    <div class="course-card">
+                        <h3>Augusta National</h3>
+                        <p>18 Holes • Par 72</p>
+                    </div>
+                    <div class="course-card">
+                        <h3>St Andrews Old Course</h3>
+                        <p>18 Holes • Par 72</p>
+                    </div>
+                    <div class="course-card">
+                        <h3>Pebble Beach</h3>
+                        <p>18 Holes • Par 72</p>
+                    </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- 3. Stats Screen -->
+            <section id="stats-view" class="view">
+                <h2>Your Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-value">0</span>
+                        <span class="stat-label">Rounds Played</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">--</span>
+                        <span class="stat-label">Avg Score</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Settings Screen -->
+            <section id="settings-view" class="view">
+                <h2>App Settings</h2>
+                <div class="settings-list">
+                    <div class="setting-item">
+                        <span>Distance Units</span>
+                        <select id="unit-selector">
+                            <option value="yards">Yards</option>
+                            <option value="meters">Meters</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
         </main>
 
         <!-- Bottom Navigation Bar -->
         <nav class="bottom-nav">
-            <button class="nav-item active">
+            <button class="nav-item active" data-view="play-view">
                 <span class="nav-icon">⛳</span>
                 <span class="nav-label">Play</span>
             </button>
-            <button class="nav-item">
+            <button class="nav-item" data-view="courses-view">
                 <span class="nav-icon">🗺️</span>
                 <span class="nav-label">Courses</span>
             </button>
-            <button class="nav-item">
+            <button class="nav-item" data-view="stats-view">
                 <span class="nav-icon">📊</span>
                 <span class="nav-label">Stats</span>
             </button>
-            <button class="nav-item">
+            <button class="nav-item" data-view="settings-view">
                 <span class="nav-icon">⚙️</span>
                 <span class="nav-label">Settings</span>
             </button>

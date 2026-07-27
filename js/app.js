@@ -40,10 +40,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let activeCourseId = "tandragee";
     let currentHoleIndex = 0;
-    let scores = courseDatabase[activeCourseId].holes.map(h => h.par);
+    
+    // Track gross score for each hole (null = unentered/unplayed)
+    let rawScores = new Array(courseDatabase[activeCourseId].holes.length).fill(null);
+    // Track saved scores (only updated when user clicks 'Save Score')
+    let savedScores = new Array(courseDatabase[activeCourseId].holes.length).fill(null);
+
     let watchId = null;
 
-    // Haversine Formula (Calculates distance in Yards)
+    // Helper: Extra handicap strokes based on Stroke Index
+    function getExtraStrokes(handicap, strokeIndex) {
+        let strokes = Math.floor(handicap / 18);
+        let remainder = handicap % 18;
+        if (strokeIndex <= remainder) strokes += 1;
+        return strokes;
+    }
+
+    // Helper: Calculate Stableford Points
+    function calculateStablefordPoints(grossScore, par, strokeIndex, playingHandicap) {
+        if (grossScore === null || grossScore <= 0) return 0;
+        const extraStrokes = getExtraStrokes(playingHandicap, strokeIndex);
+        const netScore = grossScore - extraStrokes;
+        const points = par - netScore + 2;
+        return Math.max(0, points);
+    }
+
+    // Haversine Formula (Yards)
     function calculateYards(lat1, lon1, lat2, lon2) {
         const R = 6371e3;
         const rad = Math.PI / 180;
@@ -56,11 +78,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return Math.round((R * c) * 1.09361);
     }
 
-   function updateHoleDisplay(userLat = null, userLon = null) {
+    function updateHoleDisplay(userLat = null, userLon = null) {
         const course = courseDatabase[activeCourseId];
         const data = course.holes[currentHoleIndex];
 
-        // Update UI
+        // Course Name & Hole Header
         const courseTag = document.getElementById("current-course-name");
         if (courseTag) courseTag.innerText = course.name;
 
@@ -70,8 +92,11 @@ document.addEventListener("DOMContentLoaded", () => {
         const siSpan = document.getElementById("current-si");
         if (siSpan) siSpan.innerText = data.si;
 
-        document.getElementById("current-score-display").innerText = scores[currentHoleIndex];
+        // Current Score Display (- if unentered)
+        const displayScore = rawScores[currentHoleIndex] !== null ? rawScores[currentHoleIndex] : "-";
+        document.getElementById("current-score-display").innerText = displayScore;
 
+        // GPS Distances
         if (userLat && userLon) {
             const centerDist = calculateYards(userLat, userLon, data.greenLat, data.greenLon);
             document.getElementById("dist-center").innerText = centerDist;
@@ -83,166 +108,190 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("dist-back").innerText = data.defaultBack;
         }
 
-        // --- STABLEFORD CALCULATION ---
+        // --- STABLEFORD POINTS CALCULATION ---
         const hcpInput = document.getElementById("playing-handicap");
         const playingHcp = hcpInput ? parseInt(hcpInput.value, 10) || 0 : 18;
 
-        // Calculate points for current hole
-        const currentGross = scores[currentHoleIndex];
-        const holePts = calculateStablefordPoints(currentGross, data.par, data.si, playingHcp);
+        // Display current hole's saved points
+        const savedGrossForHole = savedScores[currentHoleIndex];
+        const currentHolePts = savedGrossForHole !== null ? calculateStablefordPoints(savedGrossForHole, data.par, data.si, playingHcp) : 0;
         const holePtsElem = document.getElementById("hole-points");
-        if (holePtsElem) holePtsElem.innerText = holePts;
+        if (holePtsElem) holePtsElem.innerText = currentHolePts;
 
-        // Calculate total running points for all played holes
-        const currentCourseHoles = courseDatabase[activeCourseId].holes;
+        // Calculate total running points from saved scores
         let totalPts = 0;
-        currentCourseHoles.forEach((h, idx) => {
-            totalPts += calculateStablefordPoints(scores[idx], h.par, h.si, playingHcp);
+        course.holes.forEach((h, idx) => {
+            if (savedScores[idx] !== null) {
+                totalPts += calculateStablefordPoints(savedScores[idx], h.par, h.si, playingHcp);
+            }
         });
 
         const totalPtsElem = document.getElementById("total-points");
         if (totalPtsElem) totalPtsElem.innerText = totalPts;
     }
-    // Manual Course Selection
-    const courseCards = document.querySelectorAll(".course-card");
-    courseCards.forEach(card => {
-        card.addEventListener("click", () => {
-            const selectedId = card.getAttribute("data-course-id");
-            if (courseDatabase[selectedId]) {
-                activeCourseId = selectedId;
-                currentHoleIndex = 0;
-                scores = courseDatabase[activeCourseId].holes.map(h => h.par);
 
-                courseCards.forEach(c => c.classList.remove("active-course"));
-                card.classList.add("active-course");
-
-                updateHoleDisplay();
-                alert(`Loaded course: ${courseDatabase[activeCourseId].name}`);
-            }
-        });
-    });
-
-    // Auto-Detect Course via GPS
-    const autoDetectBtn = document.getElementById("auto-detect-btn");
-    if (autoDetectBtn) {
-        autoDetectBtn.addEventListener("click", () => {
-            if ("geolocation" in navigator) {
-                autoDetectBtn.innerText = "Locating...";
-                navigator.geolocation.getCurrentPosition((pos) => {
-                    const uLat = pos.coords.latitude;
-                    const uLon = pos.coords.longitude;
-                    
-                    let closestCourse = null;
-                    let shortestDist = Infinity;
-
-                    for (let id in courseDatabase) {
-                        const distYards = calculateYards(uLat, uLon, courseDatabase[id].lat, courseDatabase[id].lon);
-                        if (distYards < shortestDist) {
-                            shortestDist = distYards;
-                            closestCourse = id;
-                        }
-                    }
-
-                    // If within ~5km (5500 yards), auto-select it!
-                    if (closestCourse && shortestDist < 5500) {
-                        activeCourseId = closestCourse;
-                        currentHoleIndex = 0;
-                        scores = courseDatabase[activeCourseId].holes.map(h => h.par);
-
-                        courseCards.forEach(c => {
-                            c.classList.toggle("active-course", c.getAttribute("data-course-id") === activeCourseId);
-                        });
-
-                        updateHoleDisplay();
-                        alert(`📍 Nearby course detected: ${courseDatabase[activeCourseId].name}!`);
-                    } else {
-                        alert("No saved course detected nearby. Playing in universal GPS mode.");
-                    }
-                    autoDetectBtn.innerText = "Detect";
-                }, () => {
-                    alert("GPS location access denied or unavailable.");
-                    autoDetectBtn.innerText = "Detect";
-                });
-            }
-        });
-    }
-
-    // Toggle Real Phone GPS
-    const gpsToggleBtn = document.getElementById("toggle-gps-btn");
-    const gpsAccuracyDisplay = document.getElementById("gps-accuracy-display");
-
-    if (gpsToggleBtn) {
-        gpsToggleBtn.addEventListener("click", () => {
-            if (watchId === null) {
-                if ("geolocation" in navigator) {
-                    gpsToggleBtn.innerText = "🛑 Stop Live GPS";
-                    gpsToggleBtn.classList.add("active");
-                    gpsAccuracyDisplay.innerText = "Acquiring signal...";
-
-                    watchId = navigator.geolocation.watchPosition(
-                        (position) => {
-                            const lat = position.coords.latitude;
-                            const lon = position.coords.longitude;
-                            const accuracy = Math.round(position.coords.accuracy * 1.09361);
-
-                            gpsAccuracyDisplay.innerText = `GPS Acc: ±${accuracy} yd`;
-                            updateHoleDisplay(lat, lon);
-                        },
-                        (error) => {
-                            alert("Location access denied.");
-                            gpsToggleBtn.innerText = "📡 Enable Live Phone GPS";
-                            gpsToggleBtn.classList.remove("active");
-                            gpsAccuracyDisplay.innerText = "GPS: Off";
-                            watchId = null;
-                        },
-                        { enableHighAccuracy: true, maximumAge: 1000, timeout: 10000 }
-                    );
-                }
-            } else {
-                navigator.geolocation.clearWatch(watchId);
-                watchId = null;
-                gpsToggleBtn.innerText = "📡 Enable Live Phone GPS";
-                gpsToggleBtn.classList.remove("active");
-                gpsAccuracyDisplay.innerText = "GPS: Off";
-                updateHoleDisplay();
-            }
-        });
-    }
-
-    // Score (+ / -)
+    // Score Counter Controls (+ / -)
     const minusBtn = document.getElementById("minus-score-btn");
     const plusBtn = document.getElementById("plus-score-btn");
     const logScoreBtn = document.getElementById("log-score-btn");
 
     if (minusBtn && plusBtn) {
         minusBtn.addEventListener("click", () => {
-            if (scores[currentHoleIndex] > 1) {
-                scores[currentHoleIndex]--;
-                updateHoleDisplay();
+            const par = courseDatabase[activeCourseId].holes[currentHoleIndex].par;
+            if (rawScores[currentHoleIndex] === null) {
+                rawScores[currentHoleIndex] = par;
+            } else if (rawScores[currentHoleIndex] > 1) {
+                rawScores[currentHoleIndex]--;
             }
+            updateHoleDisplay();
         });
+
         plusBtn.addEventListener("click", () => {
-            scores[currentHoleIndex]++;
+            const par = courseDatabase[activeCourseId].holes[currentHoleIndex].par;
+            if (rawScores[currentHoleIndex] === null) {
+                rawScores[currentHoleIndex] = par;
+            } else {
+                rawScores[currentHoleIndex]++;
+            }
             updateHoleDisplay();
         });
     }
-// --- STEP 3 C: HANDICAP LISTENER ---
-    const hcpInput = document.getElementById("playing-handicap");
-    if (hcpInput) {
-        hcpInput.addEventListener("input", () => {
-            updateHoleDisplay();
-        });
-    }
+
+    // Save Score Button (Saves score for this hole & updates point total)
     if (logScoreBtn) {
         logScoreBtn.addEventListener("click", () => {
-            const currentHole = courseDatabase[activeCourseId].holes[currentHoleIndex].hole;
-            const currentScore = scores[currentHoleIndex];
-            alert(`Saved ${currentScore} for Hole ${currentHole}!`);
+            if (rawScores[currentHoleIndex] === null) {
+                alert("Please select a score before saving.");
+                return;
+            }
+
+            savedScores[currentHoleIndex] = rawScores[currentHoleIndex];
+            const currentHoleNum = courseDatabase[activeCourseId].holes[currentHoleIndex].hole;
             
+            updateHoleDisplay();
+            alert(`Saved score of ${savedScores[currentHoleIndex]} for Hole ${currentHoleNum}!`);
+
+            // Advance to next hole if available
             if (currentHoleIndex < courseDatabase[activeCourseId].holes.length - 1) {
                 currentHoleIndex++;
                 updateHoleDisplay();
             }
+        });
+    }
+
+    // Finish Round & Save to Stats
+    const finishRoundBtn = document.getElementById("finish-round-btn");
+    if (finishRoundBtn) {
+        finishRoundBtn.addEventListener("click", () => {
+            const course = courseDatabase[activeCourseId];
+            const hcpInput = document.getElementById("playing-handicap");
+            const playingHcp = hcpInput ? parseInt(hcpInput.value, 10) || 0 : 18;
+
+            let totalPoints = 0;
+            let totalGross = 0;
+            let holesPlayed = 0;
+
+            course.holes.forEach((h, idx) => {
+                if (savedScores[idx] !== null) {
+                    totalPoints += calculateStablefordPoints(savedScores[idx], h.par, h.si, playingHcp);
+                    totalGross += savedScores[idx];
+                    holesPlayed++;
+                }
+            });
+
+            if (holesPlayed === 0) {
+                alert("No scores saved yet for this round.");
+                return;
+            }
+
+            const roundRecord = {
+                id: Date.now(),
+                date: new Date().toLocaleDateString(),
+                courseName: course.name,
+                handicap: playingHcp,
+                totalPoints: totalPoints,
+                totalGross: totalGross,
+                holesPlayed: holesPlayed
+            };
+
+            // Save round in localStorage
+            let savedRounds = JSON.parse(localStorage.getItem("golf_rounds") || "[]");
+            savedRounds.push(roundRecord);
+            localStorage.setItem("golf_rounds", JSON.stringify(savedRounds));
+
+            alert(`Round finished! You scored ${totalPoints} Stableford points over ${holesPlayed} holes.`);
+
+            // Reset current round
+            rawScores = new Array(course.holes.length).fill(null);
+            savedScores = new Array(course.holes.length).fill(null);
+            currentHoleIndex = 0;
+            updateHoleDisplay();
+
+            // Render updated stats & switch to Stats tab
+            renderStatsView();
+            switchToTab("stats-view");
+        });
+    }
+
+    // Render Stats View (Shows saved rounds with Delete button)
+    function renderStatsView() {
+        const container = document.getElementById("saved-rounds-list");
+        if (!container) return;
+
+        let savedRounds = JSON.parse(localStorage.getItem("golf_rounds") || "[]");
+
+        if (savedRounds.length === 0) {
+            container.innerHTML = `<p style="color: #888; text-align: center;">No saved rounds yet. Finish a round to see it here!</p>`;
+            return;
+        }
+
+        container.innerHTML = "";
+        savedRounds.reverse().forEach((round) => {
+            const card = document.createElement("div");
+            card.className = "saved-round-card";
+            card.innerHTML = `
+                <div>
+                    <div class="round-info-title">${round.courseName}</div>
+                    <div class="round-info-details">
+                        📅 ${round.date} • HCP ${round.handicap}<br>
+                        <strong>${round.totalPoints} Points</strong> (${round.totalGross} Gross over ${round.holesPlayed} holes)
+                    </div>
+                </div>
+                <button class="delete-round-btn" data-id="${round.id}">Delete</button>
+            `;
+            container.appendChild(card);
+        });
+
+        // Add event listeners to Delete buttons
+        const deleteBtns = container.querySelectorAll(".delete-round-btn");
+        deleteBtns.forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const idToDelete = parseInt(e.target.getAttribute("data-id"), 10);
+                deleteRound(idToDelete);
+            });
+        });
+    }
+
+    // Delete a Round from Stats
+    function deleteRound(id) {
+        if (confirm("Are you sure you want to delete this round?")) {
+            let savedRounds = JSON.parse(localStorage.getItem("golf_rounds") || "[]");
+            savedRounds = savedRounds.filter(r => r.id !== id);
+            localStorage.setItem("golf_rounds", JSON.stringify(savedRounds));
+            renderStatsView();
+        }
+    }
+
+    // Helper to switch active tab view
+    function switchToTab(viewId) {
+        const navItems = document.querySelectorAll(".nav-item");
+        const views = document.querySelectorAll(".view");
+
+        navItems.forEach((nav) => {
+            nav.classList.toggle("active", nav.getAttribute("data-view") === viewId);
+        });
+        views.forEach((view) => {
+            view.classList.toggle("active-view", view.id === viewId);
         });
     }
 
@@ -265,41 +314,27 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Tab Switching
+    // Tab Navigation Listener
     const navItems = document.querySelectorAll(".nav-item");
-    const views = document.querySelectorAll(".view");
-
     navItems.forEach((item) => {
         item.addEventListener("click", () => {
             const targetViewId = item.getAttribute("data-view");
-            navItems.forEach((nav) => nav.classList.remove("active"));
-            views.forEach((view) => view.classList.remove("active-view"));
-
-            item.classList.add("active");
-            const targetView = document.getElementById(targetViewId);
-            if (targetView) targetView.classList.add("active-view");
+            switchToTab(targetViewId);
+            if (targetViewId === "stats-view") {
+                renderStatsView();
+            }
         });
     });
 
-    updateHoleDisplay();
-});
-// Calculate how many handicap strokes a player gets on a hole
-function getExtraStrokes(handicap, strokeIndex) {
-    let strokes = Math.floor(handicap / 18);
-    let remainder = handicap % 18;
-    if (strokeIndex <= remainder) {
-        strokes += 1;
+    // Listen for Handicap Changes
+    const hcpInput = document.getElementById("playing-handicap");
+    if (hcpInput) {
+        hcpInput.addEventListener("input", () => {
+            updateHoleDisplay();
+        });
     }
-    return strokes;
-}
 
-// Calculate Stableford Points for a single hole
-function calculateStablefordPoints(grossScore, par, strokeIndex, playingHandicap) {
-    if (!grossScore || grossScore <= 0) return 0;
-    
-    const extraStrokes = getExtraStrokes(playingHandicap, strokeIndex);
-    const netScore = grossScore - extraStrokes;
-    const points = par - netScore + 2;
-    
-    return Math.max(0, points); // Cannot score negative points
-}
+    // Initial render
+    updateHoleDisplay();
+    renderStatsView();
+});

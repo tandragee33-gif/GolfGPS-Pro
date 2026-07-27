@@ -30,7 +30,7 @@
         <div class="hole-number">Hole <span id="current-hole">1</span></div>
         <div class="hole-info">Par <span id="current-par">4</span> • SI <span id="current-si">8</span></div>
     </div>
-    
+
     <div class="stableford-summary">
     <span class="pts-badge">Hole Pts: <strong id="hole-points">2</strong></span>
     <span class="total-badge">Total Pts: <strong id="total-points">0</strong></span>
@@ -77,6 +77,10 @@
         <button class="control-btn" id="prev-hole-btn">◀ Prev Hole</button>
         <button class="control-btn primary-action" id="next-hole-btn">Next Hole ▶</button>
     </div>
+
+    <!-- Finish Round Action -->
+<button class="finish-round-btn" id="finish-round-btn">🏁 Finish Round & Save to Stats</button>
+
 </section>
 
  <!-- 2. Courses Screen -->
@@ -118,19 +122,13 @@
     </div>
 </section>
 
-            <!-- 3. Stats Screen -->
-            <section id="stats-view" class="view">
-                <h2>Your Statistics</h2>
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <span class="stat-value">0</span>
-                        <span class="stat-label">Rounds Played</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-value">--</span>
-                        <span class="stat-label">Avg Score</span>
-                    </div>
-                </div>
+<!-- 3. Stats Screen -->
+<section id="stats-view" class="view">
+    <h2>Saved Rounds</h2>
+    <div id="saved-rounds-list" class="saved-rounds-list">
+        <p style="color: #888; text-align: center;">No saved rounds yet. Finish a round to see it here!</p>
+    </div>
+</section>
             </section>
 
             <!-- 4. Settings Screen -->

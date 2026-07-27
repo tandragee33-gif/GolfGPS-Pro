@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Helper: Calculate Stableford Points
     function calculateStablefordPoints(grossScore, par, strokeIndex, playingHandicap) {
-        if (grossScore === null || grossScore <= 0) return 0;
+        if (grossScore === null || grossScore === 0) return 0;
         const extraStrokes = getExtraStrokes(playingHandicap, strokeIndex);
         const netScore = grossScore - extraStrokes;
         const points = par - netScore + 2;
@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (totalPtsElem) totalPtsElem.innerText = totalPts;
     }
 
-    // Score Counter Controls (+ / -)
+// Score Counter Controls (+ / -)
     const minusBtn = document.getElementById("minus-score-btn");
     const plusBtn = document.getElementById("plus-score-btn");
     const logScoreBtn = document.getElementById("log-score-btn");
@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const par = courseDatabase[activeCourseId].holes[currentHoleIndex].par;
             if (rawScores[currentHoleIndex] === null) {
                 rawScores[currentHoleIndex] = par;
-            } else if (rawScores[currentHoleIndex] > 1) {
+            } else if (rawScores[currentHoleIndex] > 0) {
                 rawScores[currentHoleIndex]--;
             }
             updateHoleDisplay();

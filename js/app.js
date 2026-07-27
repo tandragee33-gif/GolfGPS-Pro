@@ -40,6 +40,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let activeCourseId = "tandragee";
     let currentHoleIndex = 0;
+
+    // Tracks when you reach the green so it can auto-advance at the next tee
+let reachedCurrentGreen = false;
     
     // Track gross score for each hole (null = unentered/unplayed)
     let rawScores = new Array(courseDatabase[activeCourseId].holes.length).fill(null);
@@ -102,6 +105,25 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("dist-center").innerText = centerDist;
             document.getElementById("dist-front").innerText = centerDist - 15;
             document.getElementById("dist-back").innerText = centerDist + 15;
+            // --- AUTO-ADVANCE TO NEXT HOLE ---
+            // 1. Mark that you reached the current green (within 30 yards)
+            if (centerDist <= 30) {
+                reachedCurrentGreen = true;
+            }
+
+            // 2. Walk away towards the next tee (more than 45 yards), switch hole
+            if (reachedCurrentGreen && centerDist > 45) {
+                if (currentHoleIndex < course.holes.length - 1) {
+                    currentHoleIndex++;
+                    reachedCurrentGreen = false; // Reset for next hole
+                    updateHoleDisplay(userLat, userLon);
+                }
+            }
+        } else {
+            document.getElementById("dist-front").innerText = data.defaultFront;
+            document.getElementById("dist-center").innerText = data.defaultCenter;
+            document.getElementById("dist-back").innerText = data.defaultBack;
+        }
         } else {
             document.getElementById("dist-front").innerText = data.defaultFront;
             document.getElementById("dist-center").innerText = data.defaultCenter;
@@ -368,7 +390,7 @@ const roundRecord = {
         });
     }
 
-    // Hole Navigation
+   // Hole Navigation
     const prevBtn = document.getElementById("prev-hole-btn");
     const nextBtn = document.getElementById("next-hole-btn");
 
@@ -376,12 +398,14 @@ const roundRecord = {
         prevBtn.addEventListener("click", () => {
             if (currentHoleIndex > 0) {
                 currentHoleIndex--;
+                reachedCurrentGreen = false;
                 updateHoleDisplay();
             }
         });
         nextBtn.addEventListener("click", () => {
             if (currentHoleIndex < courseDatabase[activeCourseId].holes.length - 1) {
                 currentHoleIndex++;
+                reachedCurrentGreen = false;
                 updateHoleDisplay();
             }
         });

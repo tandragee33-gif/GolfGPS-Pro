@@ -18,23 +18,37 @@
         <main class="app-content">
             <!-- 1. Play Screen -->
             <section id="play-view" class="view active-view">
-                <div class="hero-card">
-                    <h2>Ready for Your Round?</h2>
-                    <p>Select a course or tap quick start to begin tracking distances.</p>
-                    <button class="primary-btn" id="start-round-btn">▶ Start New Round</button>
-                </div>
+    <!-- Active Hole & GPS View -->
+    <div class="hole-header">
+        <div class="hole-number">Hole <span id="current-hole">1</span></div>
+        <div class="hole-info">Par <span id="current-par">4</span> • <span id="current-handicap">HCP 7</span></div>
+    </div>
 
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <span class="stat-value">18</span>
-                        <span class="stat-label">Holes</span>
-                    </div>
-                    <div class="stat-card">
-                        <span class="stat-value">Par 72</span>
-                        <span class="stat-label">Course Standard</span>
-                    </div>
-                </div>
-            </section>
+    <!-- Main Distance Displays -->
+    <div class="distance-card">
+        <div class="dist-row secondary">
+            <span class="dist-label">BACK</span>
+            <span class="dist-number" id="dist-back">385</span>
+            <span class="dist-unit">yd</span>
+        </div>
+        <div class="dist-row primary">
+            <span class="dist-label">CENTER</span>
+            <span class="dist-number" id="dist-center">365</span>
+            <span class="dist-unit">yd</span>
+        </div>
+        <div class="dist-row secondary">
+            <span class="dist-label">FRONT</span>
+            <span class="dist-number" id="dist-front">342</span>
+            <span class="dist-unit">yd</span>
+        </div>
+    </div>
+
+    <!-- Hole Navigation Controls -->
+    <div class="hole-controls">
+        <button class="control-btn" id="prev-hole-btn">◀ Prev Hole</button>
+        <button class="control-btn primary-action" id="next-hole-btn">Next Hole ▶</button>
+    </div>
+</section>
 
             <!-- 2. Courses Screen -->
             <section id="courses-view" class="view">

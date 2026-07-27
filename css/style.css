@@ -299,10 +299,107 @@ body {
     color: #81c784;
 }
 
+
 .nav-icon {
     font-size: 20px;
 }
 
 .nav-label {
     font-size: 11px;
+}
+/* Hole Header */
+.hole-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 12px 18px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+.hole-number {
+    font-size: 22px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.hole-info {
+    font-size: 14px;
+    color: #a0a0a0;
+}
+
+/* Distance Main Card */
+.distance-card {
+    background: linear-gradient(180deg, #1e3a1e 0%, #0d1f0d 100%);
+    border: 2px solid #2e7d32;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+.dist-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 10px 15px;
+    border-radius: 10px;
+}
+
+.dist-row.primary {
+    background-color: rgba(76, 175, 80, 0.2);
+    border-left: 4px solid #4caf50;
+    margin: 10px 0;
+    padding: 14px 15px;
+}
+
+.dist-label {
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #a0a0a0;
+}
+
+.dist-row.primary .dist-label {
+    color: #81c784;
+}
+
+.dist-number {
+    font-size: 32px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.dist-row.primary .dist-number {
+    font-size: 48px;
+    color: #ffffff;
+}
+
+.dist-unit {
+    font-size: 14px;
+    color: #888;
+}
+
+/* Hole Navigation Controls */
+.hole-controls {
+    display: flex;
+    gap: 10px;
+}
+
+.control-btn {
+    flex: 1;
+    padding: 14px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background-color: rgba(255,255,255,0.05);
+    color: white;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.control-btn.primary-action {
+    background-color: #2e7d32;
+    border: none;
 }

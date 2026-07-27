@@ -1,55 +1,3 @@
-// Wait for the entire web page to load before running any code
-document.addEventListener("DOMContentLoaded", () => {
-    
-    // 1. Set today's date (if an element with id="today" exists)
-    const todayElement = document.getElementById("today");
-    if (todayElement) {
-        const today = new Date();
-        todayElement.innerHTML = today.toLocaleDateString("en-GB", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-            year: "numeric"
-        });
-    }
-
-    // 2. Set GPS status
-    const gpsElement = document.getElementById("gps-status");
-    if (gpsElement) {
-        gpsElement.innerHTML = "GPS Ready";
-    }
-
-    // 3. Tab Navigation Logic
-    const navItems = document.querySelectorAll(".nav-item");
-    const views = document.querySelectorAll(".view");
-
-    navItems.forEach((item) => {
-        item.addEventListener("click", () => {
-            const targetViewId = item.getAttribute("data-view");
-
-            // Remove active class from all buttons
-            navItems.forEach((nav) => nav.classList.remove("active"));
-
-            // Hide all views
-            views.forEach((view) => view.classList.remove("active-view"));
-
-            // Activate clicked button and display selected view
-            item.classList.add("active");
-            const targetView = document.getElementById(targetViewId);
-            if (targetView) {
-                targetView.classList.add("active-view");
-            }
-        });
-    });
-
-    // 4. Start Round Button Event
-    const startBtn = document.getElementById("start-round-btn");
-    if (startBtn) {
-        startBtn.addEventListener("click", () => {
-            alert("Starting round! GPS tracking initialized.");
-        });
-    }
-});
 document.addEventListener("DOMContentLoaded", () => {
     
     // Sample 18-Hole Data
@@ -66,6 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     let currentHoleIndex = 0;
+    // Store scores for each hole (defaults to Par)
+    const scores = holeData.map(h => h.par);
 
     function updateHoleDisplay() {
         const data = holeData[currentHoleIndex];
@@ -75,6 +25,42 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("dist-front").innerText = data.front;
         document.getElementById("dist-center").innerText = data.center;
         document.getElementById("dist-back").innerText = data.back;
+
+        // Show score for this hole
+        document.getElementById("current-score-display").innerText = scores[currentHoleIndex];
+    }
+
+    // Score Counter Controls (+ / -)
+    const minusBtn = document.getElementById("minus-score-btn");
+    const plusBtn = document.getElementById("plus-score-btn");
+    const logScoreBtn = document.getElementById("log-score-btn");
+
+    if (minusBtn && plusBtn) {
+        minusBtn.addEventListener("click", () => {
+            if (scores[currentHoleIndex] > 1) {
+                scores[currentHoleIndex]--;
+                updateHoleDisplay();
+            }
+        });
+
+        plusBtn.addEventListener("click", () => {
+            scores[currentHoleIndex]++;
+            updateHoleDisplay();
+        });
+    }
+
+    if (logScoreBtn) {
+        logScoreBtn.addEventListener("click", () => {
+            const currentHole = holeData[currentHoleIndex].hole;
+            const currentScore = scores[currentHoleIndex];
+            alert(`Saved ${currentScore} for Hole ${currentHole}!`);
+            
+            // Automatically advance to next hole if not on last
+            if (currentHoleIndex < holeData.length - 1) {
+                currentHoleIndex++;
+                updateHoleDisplay();
+            }
+        });
     }
 
     // Hole Navigation Buttons

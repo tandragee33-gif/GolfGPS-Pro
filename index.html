@@ -17,7 +17,7 @@
         <!-- Main Content Area with Screen Views -->
         <main class="app-content">
             <!-- 1. Play Screen -->
-            <section id="play-view" class="view active-view">
+<section id="play-view" class="view active-view">
     <!-- Active Hole & GPS View -->
     <div class="hole-header">
         <div class="hole-number">Hole <span id="current-hole">1</span></div>
@@ -41,6 +41,17 @@
             <span class="dist-number" id="dist-front">342</span>
             <span class="dist-unit">yd</span>
         </div>
+    </div>
+
+    <!-- Score Tracker Card -->
+    <div class="score-card">
+        <span class="score-label">SCORE FOR THIS HOLE</span>
+        <div class="score-controls">
+            <button class="score-btn" id="minus-score-btn">-</button>
+            <span class="score-display" id="current-score-display">4</span>
+            <button class="score-btn" id="plus-score-btn">+</button>
+        </div>
+        <button class="primary-btn log-score-btn" id="log-score-btn">✓ Save Score</button>
     </div>
 
     <!-- Hole Navigation Controls -->

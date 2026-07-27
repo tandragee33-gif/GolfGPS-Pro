@@ -471,6 +471,22 @@ const roundRecord = {
             }
         });
     }
+
+    // Mode Switcher (Score & GPS vs Rangefinder Only)
+    const modeToggleBtn = document.getElementById("mode-toggle-btn");
+    const playView = document.getElementById("play-view");
+
+    if (modeToggleBtn && playView) {
+        modeToggleBtn.addEventListener("click", () => {
+            playView.classList.toggle("rangefinder-mode");
+            
+            if (playView.classList.contains("rangefinder-mode")) {
+                modeToggleBtn.innerText = "Mode: 🎯 Rangefinder Only";
+            } else {
+                modeToggleBtn.innerText = "Mode: 📝 Score & GPS";
+            }
+        });
+    }
     // Initial render
     updateHoleDisplay();
     renderStatsView();

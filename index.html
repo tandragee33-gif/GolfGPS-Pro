@@ -20,6 +20,11 @@
 <section id="play-view" class="view active-view">
     <div class="course-name-tag" id="current-course-name">Tandragee Golf Club</div>
 
+    <!-- Mode Switch Button -->
+    <div class="mode-toggle-container">
+        <button id="mode-toggle-btn" class="mode-btn">Mode: 📝 Score & GPS</button>
+    </div>
+
     <div class="handicap-input-container">
     <label for="playing-handicap">Playing Handicap:</label>
     <input type="number" id="playing-handicap" value="18" min="0" max="54">
@@ -32,7 +37,6 @@
     </div>
 
     <div class="stableford-summary">
-    <span class="pts-badge">Hole Pts: <strong id="hole-points">2</strong></span>
     <span class="total-badge">Total Pts: <strong id="total-points">0</strong></span>
 </div>
 

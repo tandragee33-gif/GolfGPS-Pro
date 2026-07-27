@@ -743,3 +743,25 @@ body {
 .view-card-btn:hover {
     background-color: #1976D2;
 }
+/* Mode Switcher Styles */
+.mode-toggle-container {
+    text-align: center;
+    margin-bottom: 12px;
+}
+
+.mode-btn {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border: 1px solid #555;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Hides scoring elements when Rangefinder mode is active */
+.rangefinder-mode .score-card-container,
+.rangefinder-mode .log-score-btn {
+    display: none !important;
+}

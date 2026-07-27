@@ -204,14 +204,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            const roundRecord = {
+const roundRecord = {
                 id: Date.now(),
                 date: new Date().toLocaleDateString(),
                 courseName: course.name,
                 handicap: playingHcp,
                 totalPoints: totalPoints,
                 totalGross: totalGross,
-                holesPlayed: holesPlayed
+                holesPlayed: holesPlayed,
+                holeDetails: course.holes.map((h, idx) => ({
+                    hole: h.hole,
+                    par: h.par,
+                    si: h.si,
+                    gross: savedScores[idx],
+                    pts: savedScores[idx] !== null ? calculateStablefordPoints(savedScores[idx], h.par, h.si, playingHcp) : 0
+                }))
             };
 
             // Save round in localStorage
@@ -233,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Render Stats View (Shows saved rounds with Delete button)
+// Render Stats View (Shows saved rounds with View & Delete buttons)
     function renderStatsView() {
         const container = document.getElementById("saved-rounds-list");
         if (!container) return;
@@ -246,7 +253,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         container.innerHTML = "";
-        savedRounds.reverse().forEach((round) => {
+        savedRounds.slice().reverse().forEach((round) => {
             const card = document.createElement("div");
             card.className = "saved-round-card";
             card.innerHTML = `
@@ -257,18 +264,84 @@ document.addEventListener("DOMContentLoaded", () => {
                         <strong>${round.totalPoints} Points</strong> (${round.totalGross} Gross over ${round.holesPlayed} holes)
                     </div>
                 </div>
-                <button class="delete-round-btn" data-id="${round.id}">Delete</button>
+                <div>
+                    <button class="view-card-btn" data-id="${round.id}">View</button>
+                    <button class="delete-round-btn" data-id="${round.id}">Delete</button>
+                </div>
             `;
             container.appendChild(card);
         });
 
-        // Add event listeners to Delete buttons
+        // Event listeners for View buttons
+        const viewBtns = container.querySelectorAll(".view-card-btn");
+        viewBtns.forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const idToView = parseInt(e.target.getAttribute("data-id"), 10);
+                showRoundDetailsModal(idToView);
+            });
+        });
+
+        // Event listeners for Delete buttons
         const deleteBtns = container.querySelectorAll(".delete-round-btn");
         deleteBtns.forEach(btn => {
             btn.addEventListener("click", (e) => {
                 const idToDelete = parseInt(e.target.getAttribute("data-id"), 10);
                 deleteRound(idToDelete);
             });
+        });
+    }
+
+    // Modal Display Function
+    function showRoundDetailsModal(id) {
+        let savedRounds = JSON.parse(localStorage.getItem("golf_rounds") || "[]");
+        const round = savedRounds.find(r => r.id === id);
+        if (!round) return;
+
+        const modal = document.getElementById("scorecard-modal");
+        const title = document.getElementById("modal-round-title");
+        const meta = document.getElementById("modal-round-meta");
+        const tbody = document.getElementById("modal-scorecard-body");
+
+        title.innerText = round.courseName;
+        meta.innerHTML = `Date: <strong>${round.date}</strong> | Playing HCP: <strong>${round.handicap}</strong><br>Total Points: <strong>${round.totalPoints}</strong> | Total Gross: <strong>${round.totalGross}</strong>`;
+
+        tbody.innerHTML = "";
+
+        if (round.holeDetails && round.holeDetails.length > 0) {
+            round.holeDetails.forEach(h => {
+                const tr = document.createElement("tr");
+                const grossVal = h.gross !== null ? h.gross : "-";
+                tr.innerHTML = `
+                    <td><strong>Hole ${h.hole}</strong></td>
+                    <td>${h.par}</td>
+                    <td>${h.si}</td>
+                    <td>${grossVal}</td>
+                    <td><strong>${h.pts}</strong></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } else {
+            tbody.innerHTML = `<tr><td colspan="5" style="color:#aaa;">Detailed hole scores not available for this round.</td></tr>`;
+        }
+
+        modal.style.display = "flex";
+    }
+
+    // Modal Close Controls
+    const closeModalBtn = document.getElementById("close-modal-btn");
+    const modalOverlay = document.getElementById("scorecard-modal");
+
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener("click", () => {
+            if (modalOverlay) modalOverlay.style.display = "none";
+        });
+    }
+
+    if (modalOverlay) {
+        modalOverlay.addEventListener("click", (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.style.display = "none";
+            }
         });
     }
 

@@ -168,5 +168,31 @@
     </div>
 
     <script src="js/app.js"></script>
+    <!-- Scorecard Details Pop-up (Modal) -->
+<div id="scorecard-modal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modal-round-title">Round Details</h3>
+            <button id="close-modal-btn" class="close-modal-btn">✖</button>
+        </div>
+        <div id="modal-round-meta" class="modal-meta"></div>
+        <div class="modal-table-container">
+            <table class="scorecard-table">
+                <thead>
+                    <tr>
+                        <th>Hole</th>
+                        <th>Par</th>
+                        <th>SI</th>
+                        <th>Gross</th>
+                        <th>Pts</th>
+                    </tr>
+                </thead>
+                <tbody id="modal-scorecard-body">
+                    <!-- Dynamic Hole Rows -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
 </html>

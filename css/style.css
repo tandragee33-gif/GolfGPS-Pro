@@ -648,3 +648,98 @@ body {
 .delete-round-btn:hover {
     background-color: #b71c1c;
 }
+/* Modal Pop-up Overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.modal-content {
+    background: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 450px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #333;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #81c784;
+    font-size: 18px;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.modal-meta {
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 12px;
+}
+
+.modal-table-container {
+    overflow-y: auto;
+    max-height: 60vh;
+}
+
+.scorecard-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 14px;
+}
+
+.scorecard-table th, .scorecard-table td {
+    padding: 8px 4px;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.scorecard-table th {
+    background: #282828;
+    color: #aaa;
+}
+
+.view-card-btn {
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-right: 6px;
+}
+
+.view-card-btn:hover {
+    background-color: #1976D2;
+}

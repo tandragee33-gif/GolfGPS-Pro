@@ -67,24 +67,44 @@
     </div>
 </section>
 
-            <!-- 2. Courses Screen -->
-            <section id="courses-view" class="view">
-                <h2>Select a Course</h2>
-                <div class="course-list">
-                    <div class="course-card">
-                        <h3>Augusta National</h3>
-                        <p>18 Holes • Par 72</p>
-                    </div>
-                    <div class="course-card">
-                        <h3>St Andrews Old Course</h3>
-                        <p>18 Holes • Par 72</p>
-                    </div>
-                    <div class="course-card">
-                        <h3>Pebble Beach</h3>
-                        <p>18 Holes • Par 72</p>
-                    </div>
-                </div>
-            </section>
+ <!-- 2. Courses Screen -->
+<section id="courses-view" class="view">
+    <h2>Select a Course</h2>
+    
+    <!-- Auto-Detect Nearby Banner -->
+    <div class="auto-detect-card">
+        <div>
+            <strong style="color: #81c784;">📡 Auto-Detect Location</strong>
+            <p style="font-size: 12px; color: #aaa;">Find the course you are standing on using GPS</p>
+        </div>
+        <button class="primary-btn" id="auto-detect-btn" style="width: auto; padding: 8px 14px; font-size: 12px;">Detect</button>
+    </div>
+
+    <div class="course-list">
+        <!-- Tandragee Golf Club -->
+        <div class="course-card active-course" data-course-id="tandragee">
+            <div class="course-header">
+                <h3>⛳ Tandragee Golf Club</h3>
+                <span class="badge">Local</span>
+            </div>
+            <p>18 Holes • Par 71 • Co. Armagh, NI</p>
+        </div>
+
+        <div class="course-card" data-course-id="standrews">
+            <div class="course-header">
+                <h3>St Andrews Old Course</h3>
+            </div>
+            <p>18 Holes • Par 72 • Scotland</p>
+        </div>
+
+        <div class="course-card" data-course-id="augusta">
+            <div class="course-header">
+                <h3>Augusta National</h3>
+            </div>
+            <p>18 Holes • Par 72 • Georgia, USA</p>
+        </div>
+    </div>
+</section>
 
             <!-- 3. Stats Screen -->
             <section id="stats-view" class="view">

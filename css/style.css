@@ -491,3 +491,50 @@ body {
     color: #81c784;
     font-weight: bold;
 }
+/* Auto Detect Card */
+.auto-detect-card {
+    background-color: rgba(46, 125, 50, 0.2);
+    border: 1px solid #2e7d32;
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 12px 0 20px 0;
+}
+
+/* Course Selection Cards */
+.course-card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.course-card:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.course-card.active-course {
+    border-color: #81c784;
+    background-color: rgba(76, 175, 80, 0.15);
+}
+
+.course-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.badge {
+    background-color: #2e7d32;
+    color: white;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: bold;
+}

@@ -100,11 +100,12 @@ let reachedCurrentGreen = false;
         document.getElementById("current-score-display").innerText = displayScore;
 
         // GPS Distances
-        if (userLat && userLon) {
+        if (userLat !== null && userLon !== null) {
             const centerDist = calculateYards(userLat, userLon, data.greenLat, data.greenLon);
             document.getElementById("dist-center").innerText = centerDist;
             document.getElementById("dist-front").innerText = centerDist - 15;
             document.getElementById("dist-back").innerText = centerDist + 15;
+
             // --- AUTO-ADVANCE TO NEXT HOLE ---
             // 1. Mark that you reached the current green (within 30 yards)
             if (centerDist <= 30) {
@@ -119,11 +120,6 @@ let reachedCurrentGreen = false;
                     updateHoleDisplay(userLat, userLon);
                 }
             }
-        } else {
-            document.getElementById("dist-front").innerText = data.defaultFront;
-            document.getElementById("dist-center").innerText = data.defaultCenter;
-            document.getElementById("dist-back").innerText = data.defaultBack;
-        }
         } else {
             document.getElementById("dist-front").innerText = data.defaultFront;
             document.getElementById("dist-center").innerText = data.defaultCenter;
@@ -151,7 +147,6 @@ let reachedCurrentGreen = false;
         const totalPtsElem = document.getElementById("total-points");
         if (totalPtsElem) totalPtsElem.innerText = totalPts;
     }
-
 // Score Counter Controls (+ / -)
     const minusBtn = document.getElementById("minus-score-btn");
     const plusBtn = document.getElementById("plus-score-btn");

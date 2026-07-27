@@ -51,6 +51,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const course = courseDatabase[activeCourseId];
         const data = course.holes[currentHoleIndex];
 
+        // Update Course Name Display
+        document.getElementById("current-course-name").innerText = course.name;
+
         document.getElementById("current-hole").innerText = data.hole;
         document.getElementById("current-par").innerText = data.par;
         document.getElementById("current-handicap").innerText = `HCP ${data.hcp}`;

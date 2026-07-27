@@ -538,3 +538,14 @@ body {
     border-radius: 10px;
     font-weight: bold;
 }
+/* Active Course Title Tag */
+.course-name-tag {
+    font-size: 13px;
+    font-weight: 700;
+    color: #81c784;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    margin-bottom: 6px;
+    opacity: 0.9;
+}

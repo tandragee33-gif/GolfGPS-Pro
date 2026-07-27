@@ -20,11 +20,21 @@
 <section id="play-view" class="view active-view">
     <div class="course-name-tag" id="current-course-name">Tandragee Golf Club</div>
 
+    <div class="handicap-input-container">
+    <label for="playing-handicap">Playing Handicap:</label>
+    <input type="number" id="playing-handicap" value="18" min="0" max="54">
+</div>
+
     <!-- Active Hole & GPS View -->
     <div class="hole-header">
         <div class="hole-number">Hole <span id="current-hole">1</span></div>
         <div class="hole-info">Par <span id="current-par">4</span> • SI <span id="current-si">8</span></div>
     </div>
+    
+    <div class="stableford-summary">
+    <span class="pts-badge">Hole Pts: <strong id="hole-points">2</strong></span>
+    <span class="total-badge">Total Pts: <strong id="total-points">0</strong></span>
+</div>
 
     <!-- Live GPS Status Bar -->
 <div class="gps-bar">

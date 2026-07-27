@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return Math.round((R * c) * 1.09361);
     }
 
-    function updateHoleDisplay(userLat = null, userLon = null) {
+   function updateHoleDisplay(userLat = null, userLon = null) {
         const course = courseDatabase[activeCourseId];
         const data = course.holes[currentHoleIndex];
 
@@ -82,8 +82,27 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("dist-center").innerText = data.defaultCenter;
             document.getElementById("dist-back").innerText = data.defaultBack;
         }
-    }
 
+        // --- STABLEFORD CALCULATION ---
+        const hcpInput = document.getElementById("playing-handicap");
+        const playingHcp = hcpInput ? parseInt(hcpInput.value, 10) || 0 : 18;
+
+        // Calculate points for current hole
+        const currentGross = scores[currentHoleIndex];
+        const holePts = calculateStablefordPoints(currentGross, data.par, data.si, playingHcp);
+        const holePtsElem = document.getElementById("hole-points");
+        if (holePtsElem) holePtsElem.innerText = holePts;
+
+        // Calculate total running points for all played holes
+        const currentCourseHoles = courseDatabase[activeCourseId].holes;
+        let totalPts = 0;
+        currentCourseHoles.forEach((h, idx) => {
+            totalPts += calculateStablefordPoints(scores[idx], h.par, h.si, playingHcp);
+        });
+
+        const totalPtsElem = document.getElementById("total-points");
+        if (totalPtsElem) totalPtsElem.innerText = totalPts;
+    }
     // Manual Course Selection
     const courseCards = document.querySelectorAll(".course-card");
     courseCards.forEach(card => {
@@ -207,7 +226,13 @@ document.addEventListener("DOMContentLoaded", () => {
             updateHoleDisplay();
         });
     }
-
+// --- STEP 3 C: HANDICAP LISTENER ---
+    const hcpInput = document.getElementById("playing-handicap");
+    if (hcpInput) {
+        hcpInput.addEventListener("input", () => {
+            updateHoleDisplay();
+        });
+    }
     if (logScoreBtn) {
         logScoreBtn.addEventListener("click", () => {
             const currentHole = courseDatabase[activeCourseId].holes[currentHoleIndex].hole;
@@ -258,3 +283,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updateHoleDisplay();
 });
+// Calculate how many handicap strokes a player gets on a hole
+function getExtraStrokes(handicap, strokeIndex) {
+    let strokes = Math.floor(handicap / 18);
+    let remainder = handicap % 18;
+    if (strokeIndex <= remainder) {
+        strokes += 1;
+    }
+    return strokes;
+}
+
+// Calculate Stableford Points for a single hole
+function calculateStablefordPoints(grossScore, par, strokeIndex, playingHandicap) {
+    if (!grossScore || grossScore <= 0) return 0;
+    
+    const extraStrokes = getExtraStrokes(playingHandicap, strokeIndex);
+    const netScore = grossScore - extraStrokes;
+    const points = par - netScore + 2;
+    
+    return Math.max(0, points); // Cannot score negative points
+}

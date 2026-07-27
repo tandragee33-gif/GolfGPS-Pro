@@ -549,3 +549,46 @@ body {
     margin-bottom: 6px;
     opacity: 0.9;
 }
+/* Handicap & Stableford UI */
+.handicap-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.handicap-input-container input {
+    width: 50px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #222;
+    color: #4CAF50;
+    font-weight: bold;
+    text-align: center;
+}
+
+.stableford-summary {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+.pts-badge {
+    background: #1b5e20;
+    color: #a5d6a7;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+
+.total-badge {
+    background: #2e7d32;
+    color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 12px;
+}

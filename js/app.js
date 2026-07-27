@@ -1,21 +1,30 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // Database of Courses with Coordinates (Tandragee, St Andrews, Augusta)
+    // Database of Courses with Official Par, SI, and Green GPS Coordinates
     const courseDatabase = {
         tandragee: {
             name: "Tandragee Golf Club",
             lat: 54.3541,
             lon: -6.4173,
             holes: [
-                { hole: 1, par: 4, hcp: 5, defaultFront: 310, defaultCenter: 325, defaultBack: 340, greenLat: 54.3550, greenLon: -6.4180 },
-                { hole: 2, par: 3, hcp: 13, defaultFront: 140, defaultCenter: 155, defaultBack: 168, greenLat: 54.3560, greenLon: -6.4190 },
-                { hole: 3, par: 4, hcp: 1, defaultFront: 390, defaultCenter: 410, defaultBack: 425, greenLat: 54.3570, greenLon: -6.4200 },
-                { hole: 4, par: 5, hcp: 9, defaultFront: 480, defaultCenter: 505, defaultBack: 520, greenLat: 54.3580, greenLon: -6.4210 },
-                { hole: 5, par: 4, hcp: 7, defaultFront: 330, defaultCenter: 350, defaultBack: 365, greenLat: 54.3590, greenLon: -6.4220 },
-                { hole: 6, par: 3, hcp: 17, defaultFront: 120, defaultCenter: 135, defaultBack: 145, greenLat: 54.3600, greenLon: -6.4230 },
-                { hole: 7, par: 4, hcp: 3, defaultFront: 370, defaultCenter: 390, defaultBack: 405, greenLat: 54.3610, greenLon: -6.4240 },
-                { hole: 8, par: 4, hcp: 11, defaultFront: 320, defaultCenter: 340, defaultBack: 355, greenLat: 54.3620, greenLon: -6.4250 },
-                { hole: 9, par: 4, hcp: 15, defaultFront: 290, defaultCenter: 310, defaultBack: 325, greenLat: 54.3630, greenLon: -6.4260 }
+                { hole: 1, par: 4, si: 8, defaultFront: 325, defaultCenter: 346, defaultBack: 360, greenLat: 54.3550, greenLon: -6.4180 },
+                { hole: 2, par: 4, si: 16, defaultFront: 245, defaultCenter: 266, defaultBack: 280, greenLat: 54.3560, greenLon: -6.4190 },
+                { hole: 3, par: 5, si: 2, defaultFront: 470, defaultCenter: 492, defaultBack: 510, greenLat: 54.3570, greenLon: -6.4200 },
+                { hole: 4, par: 4, si: 18, defaultFront: 288, defaultCenter: 308, defaultBack: 325, greenLat: 54.3580, greenLon: -6.4210 },
+                { hole: 5, par: 3, si: 11, defaultFront: 148, defaultCenter: 166, defaultBack: 180, greenLat: 54.3590, greenLon: -6.4220 },
+                { hole: 6, par: 4, si: 6, defaultFront: 300, defaultCenter: 320, defaultBack: 335, greenLat: 54.3600, greenLon: -6.4230 },
+                { hole: 7, par: 4, si: 3, defaultFront: 362, defaultCenter: 384, defaultBack: 400, greenLat: 54.3610, greenLon: -6.4240 },
+                { hole: 8, par: 5, si: 13, defaultFront: 430, defaultCenter: 450, defaultBack: 468, greenLat: 54.3620, greenLon: -6.4250 },
+                { hole: 9, par: 3, si: 12, defaultFront: 160, defaultCenter: 179, defaultBack: 192, greenLat: 54.3630, greenLon: -6.4260 },
+                { hole: 10, par: 4, si: 14, defaultFront: 288, defaultCenter: 307, defaultBack: 322, greenLat: 54.3640, greenLon: -6.4270 },
+                { hole: 11, par: 4, si: 1, defaultFront: 355, defaultCenter: 375, defaultBack: 390, greenLat: 54.3650, greenLon: -6.4280 },
+                { hole: 12, par: 4, si: 5, defaultFront: 322, defaultCenter: 343, defaultBack: 358, greenLat: 54.3660, greenLon: -6.4290 },
+                { hole: 13, par: 4, si: 9, defaultFront: 340, defaultCenter: 359, defaultBack: 372, greenLat: 54.3670, greenLon: -6.4300 },
+                { hole: 14, par: 3, si: 17, defaultFront: 122, defaultCenter: 138, defaultBack: 150, greenLat: 54.3680, greenLon: -6.4310 },
+                { hole: 15, par: 4, si: 7, defaultFront: 285, defaultCenter: 302, defaultBack: 318, greenLat: 54.3690, greenLon: -6.4320 },
+                { hole: 16, par: 3, si: 10, defaultFront: 142, defaultCenter: 159, defaultBack: 172, greenLat: 54.3700, greenLon: -6.4330 },
+                { hole: 17, par: 5, si: 15, defaultFront: 458, defaultCenter: 478, defaultBack: 495, greenLat: 54.3710, greenLon: -6.4340 },
+                { hole: 18, par: 4, si: 4, defaultFront: 325, defaultCenter: 343, defaultBack: 358, greenLat: 54.3720, greenLon: -6.4350 }
             ]
         },
         standrews: {
@@ -23,8 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
             lat: 56.3432,
             lon: -2.8023,
             holes: [
-                { hole: 1, par: 4, hcp: 7, defaultFront: 342, defaultCenter: 365, defaultBack: 385, greenLat: 56.3432, greenLon: -2.8023 },
-                { hole: 2, par: 5, hcp: 1, defaultFront: 510, defaultCenter: 535, defaultBack: 550, greenLat: 56.3450, greenLon: -2.8050 }
+                { hole: 1, par: 4, si: 7, defaultFront: 342, defaultCenter: 365, defaultBack: 385, greenLat: 56.3432, greenLon: -2.8023 },
+                { hole: 2, par: 5, si: 1, defaultFront: 510, defaultCenter: 535, defaultBack: 550, greenLat: 56.3450, greenLon: -2.8050 }
             ]
         }
     };
@@ -34,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let scores = courseDatabase[activeCourseId].holes.map(h => h.par);
     let watchId = null;
 
-    // Haversine Formula (Calculates Yards)
+    // Haversine Formula (Calculates distance in Yards)
     function calculateYards(lat1, lon1, lat2, lon2) {
         const R = 6371e3;
         const rad = Math.PI / 180;
@@ -51,12 +60,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const course = courseDatabase[activeCourseId];
         const data = course.holes[currentHoleIndex];
 
-        // Update Course Name Display
-        document.getElementById("current-course-name").innerText = course.name;
+        // Update UI
+        const courseTag = document.getElementById("current-course-name");
+        if (courseTag) courseTag.innerText = course.name;
 
         document.getElementById("current-hole").innerText = data.hole;
         document.getElementById("current-par").innerText = data.par;
-        document.getElementById("current-handicap").innerText = `HCP ${data.hcp}`;
+        
+        const siSpan = document.getElementById("current-si");
+        if (siSpan) siSpan.innerText = data.si;
+
         document.getElementById("current-score-display").innerText = scores[currentHoleIndex];
 
         if (userLat && userLon) {
@@ -71,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Manual Course Selection from Courses Tab
+    // Manual Course Selection
     const courseCards = document.querySelectorAll(".course-card");
     courseCards.forEach(card => {
         card.addEventListener("click", () => {
@@ -81,7 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 currentHoleIndex = 0;
                 scores = courseDatabase[activeCourseId].holes.map(h => h.par);
 
-                // Highlight active card
                 courseCards.forEach(c => c.classList.remove("active-course"));
                 card.classList.add("active-course");
 
@@ -104,7 +116,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     let closestCourse = null;
                     let shortestDist = Infinity;
 
-                    // Check distance to each course in database
                     for (let id in courseDatabase) {
                         const distYards = calculateYards(uLat, uLon, courseDatabase[id].lat, courseDatabase[id].lon);
                         if (distYards < shortestDist) {
@@ -114,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
 
                     // If within ~5km (5500 yards), auto-select it!
-                    if (closestCourse) {
+                    if (closestCourse && shortestDist < 5500) {
                         activeCourseId = closestCourse;
                         currentHoleIndex = 0;
                         scores = courseDatabase[activeCourseId].holes.map(h => h.par);
@@ -125,10 +136,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
                         updateHoleDisplay();
                         alert(`📍 Nearby course detected: ${courseDatabase[activeCourseId].name}!`);
+                    } else {
+                        alert("No saved course detected nearby. Playing in universal GPS mode.");
                     }
                     autoDetectBtn.innerText = "Detect";
                 }, () => {
-                    alert("GPS position unavailable. Please ensure location services are enabled.");
+                    alert("GPS location access denied or unavailable.");
                     autoDetectBtn.innerText = "Detect";
                 });
             }
@@ -157,7 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             updateHoleDisplay(lat, lon);
                         },
                         (error) => {
-                            alert("Location access denied or unavailable.");
+                            alert("Location access denied.");
                             gpsToggleBtn.innerText = "📡 Enable Live Phone GPS";
                             gpsToggleBtn.classList.remove("active");
                             gpsAccuracyDisplay.innerText = "GPS: Off";
@@ -177,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Score Controls (+ / -)
+    // Score (+ / -)
     const minusBtn = document.getElementById("minus-score-btn");
     const plusBtn = document.getElementById("plus-score-btn");
     const logScoreBtn = document.getElementById("log-score-btn");
@@ -208,7 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Hole Navigation Buttons
+    // Hole Navigation
     const prevBtn = document.getElementById("prev-hole-btn");
     const nextBtn = document.getElementById("next-hole-btn");
 
@@ -227,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Tab Navigation
+    // Tab Switching
     const navItems = document.querySelectorAll(".nav-item");
     const views = document.querySelectorAll(".view");
 

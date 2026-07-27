@@ -426,6 +426,44 @@ const roundRecord = {
             }
         );
     }
+  // Toggle Real Phone GPS
+    const gpsToggleBtn = document.getElementById("toggle-gps-btn");
+    const gpsAccuracyDisplay = document.getElementById("gps-accuracy-display");
+
+    if (gpsToggleBtn) {
+        gpsToggleBtn.addEventListener("click", () => {
+            if (watchId === null) {
+                if ("geolocation" in navigator) {
+                    gpsToggleBtn.innerText = "🛑 Stop Live GPS";
+                    if (gpsAccuracyDisplay) gpsAccuracyDisplay.innerText = "Acquiring signal...";
+
+                    watchId = navigator.geolocation.watchPosition(
+                        (position) => {
+                            const lat = position.coords.latitude;
+                            const lon = position.coords.longitude;
+                            const accuracy = Math.round(position.coords.accuracy * 1.09361);
+
+                            if (gpsAccuracyDisplay) gpsAccuracyDisplay.innerText = `GPS Acc: ±${accuracy} yd`;
+                            updateHoleDisplay(lat, lon);
+                        },
+                        (error) => {
+                            alert("Location access denied or unavailable.");
+                            gpsToggleBtn.innerText = "📡 Enable Live Phone GPS";
+                            if (gpsAccuracyDisplay) gpsAccuracyDisplay.innerText = "GPS: Off";
+                            watchId = null;
+                        },
+                        { enableHighAccuracy: true, maximumAge: 1000, timeout: 10000 }
+                    );
+                }
+            } else {
+                navigator.geolocation.clearWatch(watchId);
+                watchId = null;
+                gpsToggleBtn.innerText = "📡 Enable Live Phone GPS";
+                if (gpsAccuracyDisplay) gpsAccuracyDisplay.innerText = "GPS: Off";
+                updateHoleDisplay();
+            }
+        });
+    }
     // Initial render
     updateHoleDisplay();
     renderStatsView();

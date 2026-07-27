@@ -1,33 +1,114 @@
 document.addEventListener("DOMContentLoaded", () => {
     
-    // Sample 18-Hole Data
+    // Sample 18-Hole Data with Green Coordinates (Lat / Lon)
+    // Default reference coordinates set to St Andrews Old Course
     const holeData = [
-        { hole: 1, par: 4, hcp: 7, front: 342, center: 365, back: 385 },
-        { hole: 2, par: 5, hcp: 1, front: 510, center: 535, back: 550 },
-        { hole: 3, par: 3, hcp: 15, front: 145, center: 160, back: 172 },
-        { hole: 4, par: 4, hcp: 5, front: 390, center: 410, back: 430 },
-        { hole: 5, par: 4, hcp: 11, front: 320, center: 340, back: 355 },
-        { hole: 6, par: 3, hcp: 17, front: 125, center: 140, back: 150 },
-        { hole: 7, par: 5, hcp: 3, front: 490, center: 515, back: 540 },
-        { hole: 8, par: 4, hcp: 9, front: 370, center: 390, back: 405 },
-        { hole: 9, par: 4, hcp: 13, front: 330, center: 350, back: 365 }
+        { 
+            hole: 1, par: 4, hcp: 7, 
+            defaultFront: 342, defaultCenter: 365, defaultBack: 385,
+            greenLat: 56.3432, greenLon: -2.8023 
+        },
+        { 
+            hole: 2, par: 5, hcp: 1, 
+            defaultFront: 510, defaultCenter: 535, defaultBack: 550,
+            greenLat: 56.3450, greenLon: -2.8050 
+        },
+        { 
+            hole: 3, par: 3, hcp: 15, 
+            defaultFront: 145, defaultCenter: 160, defaultBack: 172,
+            greenLat: 56.3465, greenLon: -2.8080 
+        }
     ];
 
     let currentHoleIndex = 0;
-    // Store scores for each hole (defaults to Par)
     const scores = holeData.map(h => h.par);
+    let watchId = null; // Stores GPS tracker reference
 
-    function updateHoleDisplay() {
+    // Haversine Formula: Calculates real-world distance in Yards between two GPS points
+    function calculateYards(lat1, lon1, lat2, lon2) {
+        const R = 6371e3; // Earth's radius in meters
+        const rad = Math.PI / 180;
+        const dLat = (lat2 - lat1) * rad;
+        const dLon = (lon2 - lon1) * rad;
+
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(lat1 * rad) * Math.cos(lat2 * rad) *
+                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const meters = R * c;
+        return Math.round(meters * 1.09361); // Convert meters to yards
+    }
+
+    function updateHoleDisplay(userLat = null, userLon = null) {
         const data = holeData[currentHoleIndex];
         document.getElementById("current-hole").innerText = data.hole;
         document.getElementById("current-par").innerText = data.par;
         document.getElementById("current-handicap").innerText = `HCP ${data.hcp}`;
-        document.getElementById("dist-front").innerText = data.front;
-        document.getElementById("dist-center").innerText = data.center;
-        document.getElementById("dist-back").innerText = data.back;
-
-        // Show score for this hole
         document.getElementById("current-score-display").innerText = scores[currentHoleIndex];
+
+        if (userLat && userLon) {
+            // Calculate live yardage from user position to green
+            const centerDist = calculateYards(userLat, userLon, data.greenLat, data.greenLon);
+            document.getElementById("dist-center").innerText = centerDist;
+            document.getElementById("dist-front").innerText = centerDist - 20;
+            document.getElementById("dist-back").innerText = centerDist + 20;
+        } else {
+            // Fallback to static course defaults when GPS is off
+            document.getElementById("dist-front").innerText = data.defaultFront;
+            document.getElementById("dist-center").innerText = data.defaultCenter;
+            document.getElementById("dist-back").innerText = data.defaultBack;
+        }
+    }
+
+    // Toggle Real Smartphone GPS
+    const gpsToggleBtn = document.getElementById("toggle-gps-btn");
+    const gpsAccuracyDisplay = document.getElementById("gps-accuracy-display");
+
+    if (gpsToggleBtn) {
+        gpsToggleBtn.addEventListener("click", () => {
+            if (watchId === null) {
+                // Request live GPS location from smartphone hardware
+                if ("geolocation" in navigator) {
+                    gpsToggleBtn.innerText = "🛑 Stop Live GPS";
+                    gpsToggleBtn.classList.add("active");
+                    gpsAccuracyDisplay.innerText = "Acquiring satellite signal...";
+
+                    watchId = navigator.geolocation.watchPosition(
+                        (position) => {
+                            const lat = position.coords.latitude;
+                            const lon = position.coords.longitude;
+                            const accuracy = Math.round(position.coords.accuracy * 1.09361); // accuracy in yards
+
+                            gpsAccuracyDisplay.innerText = `GPS Acc: ±${accuracy} yd`;
+                            updateHoleDisplay(lat, lon);
+                        },
+                        (error) => {
+                            alert("Unable to acquire location. Ensure Location Access is enabled in your browser settings.");
+                            gpsToggleBtn.innerText = "📡 Enable Live Phone GPS";
+                            gpsToggleBtn.classList.remove("active");
+                            gpsAccuracyDisplay.innerText = "GPS: Error";
+                            watchId = null;
+                        },
+                        {
+                            enableHighAccuracy: true, // Use hardware GPS chip
+                            maximumAge: 1000,         // Refresh every second
+                            timeout: 10000
+                        }
+                    );
+                } else {
+                    alert("Geolocation is not supported by your browser.");
+                }
+            } else {
+                // Turn off GPS tracking
+                navigator.geolocation.clearWatch(watchId);
+                watchId = null;
+                gpsToggleBtn.innerText = "📡 Enable Live Phone GPS";
+                gpsToggleBtn.classList.remove("active");
+                gpsAccuracyDisplay.innerText = "GPS: Off";
+                updateHoleDisplay();
+            }
+        });
     }
 
     // Score Counter Controls (+ / -)
@@ -55,7 +136,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const currentScore = scores[currentHoleIndex];
             alert(`Saved ${currentScore} for Hole ${currentHole}!`);
             
-            // Automatically advance to next hole if not on last
             if (currentHoleIndex < holeData.length - 1) {
                 currentHoleIndex++;
                 updateHoleDisplay();

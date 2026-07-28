@@ -78,7 +78,7 @@ let reachedCurrentGreen = false;
                   Math.cos(lat1 * rad) * Math.cos(lat2 * rad) *
                   Math.sin(dLon / 2) * Math.sin(dLon / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return Math.round((R * c) * 1.09361)courseDatabase;
+        return Math.round((R * c) * 1.09361);
     }
 
     function updateHoleDisplay(userLat = null, userLon = null) {

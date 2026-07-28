@@ -7,24 +7,24 @@ document.addEventListener("DOMContentLoaded", () => {
             lat: 54.3541,
             lon: -6.4173,
             holes: [
-                { hole: 1, par: 4, si: 8, defaultFront: 325, defaultCenter: 346, defaultBack: 360, greenLat: 54.3550, greenLon: -6.4180 },
-                { hole: 2, par: 4, si: 16, defaultFront: 245, defaultCenter: 266, defaultBack: 280, greenLat: 54.3560, greenLon: -6.4190 },
-                { hole: 3, par: 5, si: 2, defaultFront: 470, defaultCenter: 492, defaultBack: 510, greenLat: 54.3570, greenLon: -6.4200 },
-                { hole: 4, par: 4, si: 18, defaultFront: 288, defaultCenter: 308, defaultBack: 325, greenLat: 54.3580, greenLon: -6.4210 },
-                { hole: 5, par: 3, si: 11, defaultFront: 148, defaultCenter: 166, defaultBack: 180, greenLat: 54.3590, greenLon: -6.4220 },
-                { hole: 6, par: 4, si: 6, defaultFront: 300, defaultCenter: 320, defaultBack: 335, greenLat: 54.3600, greenLon: -6.4230 },
-                { hole: 7, par: 4, si: 3, defaultFront: 362, defaultCenter: 384, defaultBack: 400, greenLat: 54.3610, greenLon: -6.4240 },
-                { hole: 8, par: 5, si: 13, defaultFront: 430, defaultCenter: 450, defaultBack: 468, greenLat: 54.3620, greenLon: -6.4250 },
-                { hole: 9, par: 3, si: 12, defaultFront: 160, defaultCenter: 179, defaultBack: 192, greenLat: 54.3630, greenLon: -6.4260 },
-                { hole: 10, par: 4, si: 14, defaultFront: 288, defaultCenter: 307, defaultBack: 322, greenLat: 54.3640, greenLon: -6.4270 },
-                { hole: 11, par: 4, si: 1, defaultFront: 355, defaultCenter: 375, defaultBack: 390, greenLat: 54.3650, greenLon: -6.4280 },
-                { hole: 12, par: 4, si: 5, defaultFront: 322, defaultCenter: 343, defaultBack: 358, greenLat: 54.3660, greenLon: -6.4290 },
-                { hole: 13, par: 4, si: 9, defaultFront: 340, defaultCenter: 359, defaultBack: 372, greenLat: 54.3670, greenLon: -6.4300 },
-                { hole: 14, par: 3, si: 17, defaultFront: 122, defaultCenter: 138, defaultBack: 150, greenLat: 54.3680, greenLon: -6.4310 },
-                { hole: 15, par: 4, si: 7, defaultFront: 285, defaultCenter: 302, defaultBack: 318, greenLat: 54.3690, greenLon: -6.4320 },
-                { hole: 16, par: 3, si: 10, defaultFront: 142, defaultCenter: 159, defaultBack: 172, greenLat: 54.3700, greenLon: -6.4330 },
-                { hole: 17, par: 5, si: 15, defaultFront: 458, defaultCenter: 478, defaultBack: 495, greenLat: 54.3710, greenLon: -6.4340 },
-                { hole: 18, par: 4, si: 4, defaultFront: 325, defaultCenter: 343, defaultBack: 358, greenLat: 54.3720, greenLon: -6.4350 }
+                { hole: 1, par: 4, si: 8, defaultFront: 325, defaultCenter: 346, defaultBack: 360, greenLat: 54.34715378652473, greenLon: -6.417337086615404 },
+                { hole: 2, par: 4, si: 16, defaultFront: 245, defaultCenter: 266, defaultBack: 280, greenLat: 54.349622661384835, greenLon: -6.415794836493512 },
+                { hole: 3, par: 5, si: 2, defaultFront: 470, defaultCenter: 492, defaultBack: 510, greenLat: 54.35156277841414, greenLon: -6.423096560342305 },
+                { hole: 4, par: 4, si: 18, defaultFront: 288, defaultCenter: 308, defaultBack: 325, greenLat: 54.349859832597524, greenLon: -6.420834308615935 },
+                { hole: 5, par: 3, si: 11, defaultFront: 148, defaultCenter: 166, defaultBack: 180, greenLat: 54.35025023088596, greenLon: -6.422898939571348 },
+                { hole: 6, par: 4, si: 6, defaultFront: 300, defaultCenter: 320, defaultBack: 335, greenLat: 54.34838406689885, greenLon: -6.422127690745724 },
+                { hole: 7, par: 4, si: 3, defaultFront: 362, defaultCenter: 384, defaultBack: 400, greenLat: 54.351299194584556, greenLon: -6.424880407828352 },
+                { hole: 8, par: 5, si: 13, defaultFront: 430, defaultCenter: 450, defaultBack: 468, greenLat: 54.34748442936552, greenLon: -6.424436442149522 },
+                { hole: 9, par: 3, si: 12, defaultFront: 160, defaultCenter: 179, defaultBack: 192, greenLat: 54.34606278771971, greenLon: -6.4241698660073565 },
+                { hole: 10, par: 4, si: 14, defaultFront: 288, defaultCenter: 307, defaultBack: 322, greenLat: 54.348152334668725, greenLon: -6.423716973744733 },
+                { hole: 11, par: 4, si: 1, defaultFront: 355, defaultCenter: 375, defaultBack: 390, greenLat: 54.34557474657937, greenLon: -6.422357738908907 },
+                { hole: 12, par: 4, si: 5, defaultFront: 322, defaultCenter: 343, defaultBack: 358, greenLat: 54.34794240258709, greenLon: -6.422010941855127 },
+                { hole: 13, par: 4, si: 9, defaultFront: 340, defaultCenter: 359, defaultBack: 372, greenLat: 54.34487631622433, greenLon: -6.420411633710065 },
+                { hole: 14, par: 3, si: 17, defaultFront: 122, defaultCenter: 138, defaultBack: 150, greenLat: 54.34550662512222, greenLon: -6.418428796425502 },
+                { hole: 15, par: 4, si: 7, defaultFront: 285, defaultCenter: 302, defaultBack: 318, greenLat: 54.34772146648081, greenLon: -6.420644311868163 },
+                { hole: 16, par: 3, si: 10, defaultFront: 142, defaultCenter: 159, defaultBack: 172, greenLat: 54.34963815877819, greenLon: -6.42009252848965 },
+                { hole: 17, par: 5, si: 15, defaultFront: 458, defaultCenter: 478, defaultBack: 495, greenLat: 54.34590925225639, greenLon: -6.417585542136856 },
+                { hole: 18, par: 4, si: 4, defaultFront: 325, defaultCenter: 343, defaultBack: 358, greenLat: 54.34903774555875, greenLon: -6.419856217458413 }
             ]
         },
         standrews: {
@@ -78,7 +78,7 @@ let reachedCurrentGreen = false;
                   Math.cos(lat1 * rad) * Math.cos(lat2 * rad) *
                   Math.sin(dLon / 2) * Math.sin(dLon / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return Math.round((R * c) * 1.09361);
+        return Math.round((R * c) * 1.09361)courseDatabase;
     }
 
     function updateHoleDisplay(userLat = null, userLon = null) {

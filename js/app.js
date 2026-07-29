@@ -182,54 +182,50 @@ let reachedCurrentGreen = false;
     }
 
     function updateHoleDisplay(userLat = null, userLon = null) {
-    const course = courseDatabase[activeCourseId];
-    const data = course.holes[currentHoleIndex];
+        const course = courseDatabase[activeCourseId];
+        const data = course.holes[currentHoleIndex];
 
-    // Course Name & Hole Header
-    const courseTag = document.getElementById("current-course-name");
-    if (courseTag) courseTag.innerText = course.name;
+        // Course Name & Hole Header
+        const courseTag = document.getElementById("current-course-name");
+        if (courseTag) courseTag.innerText = course.name;
 
-    document.getElementById("current-hole").innerText = data.hole;
-    document.getElementById("current-par").innerText = data.par;
-    
-    const siSpan = document.getElementById("current-si");
-    if (siSpan) siSpan.innerText = data.si;
+        document.getElementById("current-hole").innerText = data.hole;
+        document.getElementById("current-par").innerText = data.par;
+        
+        const siSpan = document.getElementById("current-si");
+        if (siSpan) siSpan.innerText = data.si;
 
-    // Current Score Display (- if unentered)
-    const displayScore = rawScores[currentHoleIndex] !== null ? rawScores[currentHoleIndex] : "-";
-    document.getElementById("current-score-display").innerText = displayScore;
+        // Current Score Display (- if unentered)
+        const displayScore = rawScores[currentHoleIndex] !== null ? rawScores[currentHoleIndex] : "-";
+        document.getElementById("current-score-display").innerText = displayScore;
 
-    // GPS Distances using ACTUAL front, center, and back coordinates
-    if (userLat !== null && userLon !== null) {
-        const frontDist = calculateYards(userLat, userLon, data.frontLat, data.frontLon);
-        const centerDist = calculateYards(userLat, userLon, data.greenLat, data.greenLon);
-        const backDist = calculateYards(userLat, userLon, data.backLat, data.backLon);
+        // GPS Distances
+        if (userLat !== null && userLon !== null) {
+            const centerDist = calculateYards(userLat, userLon, data.greenLat, data.greenLon);
+            document.getElementById("dist-center").innerText = centerDist;
+            document.getElementById("dist-front").innerText = centerDist - 15;
+            document.getElementById("dist-back").innerText = centerDist + 15;
 
-        document.getElementById("dist-front").innerText = frontDist;
-        document.getElementById("dist-center").innerText = centerDist;
-        document.getElementById("dist-back").innerText = backDist;
-
-        // --- AUTO-ADVANCE TO NEXT HOLE ---
-        // 1. Mark that you reached the current green (within 30 yards)
-        if (centerDist <= 30) {
-            reachedCurrentGreen = true;
-        }
-
-        // 2. Walk away towards the next tee (more than 45 yards), switch hole
-        if (reachedCurrentGreen && centerDist > 45) {
-            if (currentHoleIndex < course.holes.length - 1) {
-                currentHoleIndex++;
-                reachedCurrentGreen = false; // Reset for next hole
-                updateHoleDisplay(userLat, userLon);
+            // --- AUTO-ADVANCE TO NEXT HOLE ---
+            // 1. Mark that you reached the current green (within 30 yards)
+            if (centerDist <= 30) {
+                reachedCurrentGreen = true;
             }
+
+            // 2. Walk away towards the next tee (more than 45 yards), switch hole
+            if (reachedCurrentGreen && centerDist > 45) {
+                if (currentHoleIndex < course.holes.length - 1) {
+                    currentHoleIndex++;
+                    reachedCurrentGreen = false; // Reset for next hole
+                    updateHoleDisplay(userLat, userLon);
+                }
+            }
+        } else {
+            document.getElementById("dist-front").innerText = data.defaultFront;
+            document.getElementById("dist-center").innerText = data.defaultCenter;
+            document.getElementById("dist-back").innerText = data.defaultBack;
         }
-    } else {
-        // Show searching dashes instead of default static yards
-        document.getElementById("dist-front").innerText = "---";
-        document.getElementById("dist-center").innerText = "---";
-        document.getElementById("dist-back").innerText = "---";
-    }
-}
+
         // --- STABLEFORD POINTS CALCULATION ---
         const hcpInput = document.getElementById("playing-handicap");
         const playingHcp = hcpInput ? parseInt(hcpInput.value, 10) || 0 : 18;

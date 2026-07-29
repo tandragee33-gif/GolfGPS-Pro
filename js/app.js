@@ -135,16 +135,7 @@ const courseDatabase = {
             }
         ]
     }
-};
-        standrews: {
-            name: "St Andrews Old Course",
-            lat: 56.3432,
-            lon: -2.8023,
-            holes: [
-                { hole: 1, par: 4, si: 7, defaultFront: 342, defaultCenter: 365, defaultBack: 385, greenLat: 56.3432, greenLon: -2.8023 },
-                { hole: 2, par: 5, si: 1, defaultFront: 510, defaultCenter: 535, defaultBack: 550, greenLat: 56.3450, greenLon: -2.8050 }
-            ]
-        }
+    
     };
 
     let activeCourseId = "tandragee";

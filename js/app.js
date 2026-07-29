@@ -201,10 +201,13 @@ let reachedCurrentGreen = false;
 
         // GPS Distances
         if (userLat !== null && userLon !== null) {
+            const frontDist = calculateYards(userLat, userLon, data.frontLat, data.frontLon);
             const centerDist = calculateYards(userLat, userLon, data.greenLat, data.greenLon);
+            const backDist = calculateYards(userLat, userLon, data.backLat, data.backLon);
+
+            document.getElementById("dist-front").innerText = frontDist;
             document.getElementById("dist-center").innerText = centerDist;
-            document.getElementById("dist-front").innerText = centerDist - 15;
-            document.getElementById("dist-back").innerText = centerDist + 15;
+            document.getElementById("dist-back").innerText = backDist;
 
             // --- AUTO-ADVANCE TO NEXT HOLE ---
             // 1. Mark that you reached the current green (within 30 yards)
@@ -221,9 +224,9 @@ let reachedCurrentGreen = false;
                 }
             }
         } else {
-            document.getElementById("dist-front").innerText = data.defaultFront;
-            document.getElementById("dist-center").innerText = data.defaultCenter;
-            document.getElementById("dist-back").innerText = data.defaultBack;
+            document.getElementById("dist-front").innerText = "--";
+            document.getElementById("dist-center").innerText = "--";
+            document.getElementById("dist-back").innerText = "--";
         }
 
         // --- STABLEFORD POINTS CALCULATION ---

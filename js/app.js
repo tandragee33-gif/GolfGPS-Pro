@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
+
+    // 1. Keep the screen awake when the app loads
+    requestWakeLock();
     
    // Database of Courses with Official Par, SI, and Green GPS Coordinates
 const courseDatabase = {
@@ -180,6 +183,26 @@ let reachedCurrentGreen = false;
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return Math.round((R * c) * 1.09361);
     }
+
+    // Keep the screen awake
+let wakeLock = null;
+
+async function requestWakeLock() {
+    try {
+        if ('wakeLock' in navigator) {
+            wakeLock = await navigator.wakeLock.request('screen');
+        }
+    } catch (err) {
+        console.log(`Wake Lock Error: ${err.name}, ${err.message}`);
+    }
+}
+
+// Re-apply wake lock if the user leaves the tab and comes back
+document.addEventListener("visibilitychange", async () => {
+    if (wakeLock !== null && document.visibilityState === 'visible') {
+        await requestWakeLock();
+    }
+});
 
     function updateHoleDisplay(userLat = null, userLon = null) {
         const course = courseDatabase[activeCourseId];
